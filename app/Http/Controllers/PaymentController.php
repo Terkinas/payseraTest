@@ -22,12 +22,31 @@ class PaymentController extends Controller
             'orderid' => '1444441',
         );
 
+        function getSelfUrl(): string
+        {
+            $url = substr(strtolower($_SERVER['SERVER_PROTOCOL']), 0, strpos($_SERVER['SERVER_PROTOCOL'], '/'));
+
+            if (isset($_SERVER['HTTPS']) === true) {
+                $url .= ($_SERVER['HTTPS'] === 'on') ? 's' : '';
+            }
+
+            $url .= '://' . $_SERVER['HTTP_HOST'];
+
+            if (isset($_SERVER['SERVER_PORT']) === true && $_SERVER['SERVER_PORT'] !== '80') {
+                $url .= ':' . $_SERVER['SERVER_PORT'];
+            }
+
+            $url .= dirname($_SERVER['SCRIPT_NAME']);
+
+            return $url;
+        }
+
         $config = array(
             'projectid' => '230974',
             'sign_password' => '1a160afde820d564721b88b9ec1e188a',
-            'accepturl' => resource_path('views/accept.blade.php'),
-            'cancelurl' => resource_path('views/cancel.blade.php'),
-            'callbackurl' => resource_path('views/callback.blade.php'),
+            'accepturl' => getSelfUrl() . 'accept.php',
+            'cancelurl' => getSelfUrl() . 'cancel.php',
+            'callbackurl' => getSelfUrl() . 'callback.php',
             'test' => 1,
         );
 
