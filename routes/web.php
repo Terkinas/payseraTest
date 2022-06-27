@@ -20,3 +20,15 @@ Route::get('/', function () {
 
 Route::get('/cart', [PaymentController::class, 'index']);
 Route::post('/', [PaymentController::class, 'request'])->name('pay.request');
+
+Route::get('/accept', function () {
+    return view('accept');
+});
+
+Route::get('/cancel', function () {
+    return view('cancel');
+});
+
+Route::get('/callback', function () {
+    return view('callback');
+});

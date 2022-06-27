@@ -24,6 +24,7 @@ class PaymentController extends Controller
 
         function getSelfUrl(): string
         {
+
             $url = substr(strtolower($_SERVER['SERVER_PROTOCOL']), 0, strpos($_SERVER['SERVER_PROTOCOL'], '/'));
 
             if (isset($_SERVER['HTTPS']) === true) {
@@ -37,7 +38,6 @@ class PaymentController extends Controller
             }
 
             $url .= dirname($_SERVER['SCRIPT_NAME']);
-
             return $url;
         }
 
@@ -50,10 +50,23 @@ class PaymentController extends Controller
             'test' => 1,
         );
 
-        WebToPay::redirectToPayment(array_merge(
-            $post,
-            $config,
-            $order
-        ));
+        // WebToPay::redirectToPayment(array_merge(
+        //     $post,
+        //     $config,
+        //     $order
+        // ));
+
+        WebToPay::redirectToPayment([
+            'projectid' => '230974',
+            'sign_password' => '1a160afde820d564721b88b9ec1e188a',
+            'orderid' => 0,
+            'amount' => 1000,
+            'currency' => 'EUR',
+            'country' => 'LT',
+            'accepturl' => getSelfUrl() . '/accept',
+            'cancelurl' => getSelfUrl() . '/cancel',
+            'callbackurl' => getSelfUrl() . '/callback',
+            'test' => 0,
+        ]);
     }
 }
