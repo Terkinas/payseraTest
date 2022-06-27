@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Library for WebToPay provided services.
  * Copyright (C) 2012 http://www.webtopay.com/
@@ -27,7 +28,8 @@
 /**
  * Contains static methods for most used scenarios.
  */
-class WebToPay {
+class WebToPay
+{
 
     /**
      * WebToPay Library version.
@@ -69,7 +71,8 @@ class WebToPay {
      *
      * @throws WebToPayException on data validation error
      */
-    public static function buildRequest($data) {
+    public static function buildRequest($data)
+    {
         if (!isset($data['sign_password']) || !isset($data['projectid'])) {
             throw new WebToPayException('sign_password or projectid is not provided');
         }
@@ -95,7 +98,8 @@ class WebToPay {
      *
      * @throws WebToPayException on data validation error
      */
-    public static function redirectToPayment($data, $exit = false) {
+    public static function redirectToPayment($data, $exit = false)
+    {
         if (!isset($data['sign_password']) || !isset($data['projectid'])) {
             throw new WebToPayException('sign_password or projectid is not provided');
         }
@@ -105,6 +109,7 @@ class WebToPay {
         unset($data['projectid']);
 
         $factory = new WebToPay_Factory(array('projectId' => $projectId, 'password' => $password));
+
         $url = $factory->getRequestBuilder()
             ->buildRequestUrlFromData($data);
 
@@ -139,7 +144,8 @@ class WebToPay {
      *
      * @throws WebToPayException on data validation error
      */
-    public static function buildRepeatRequest($data) {
+    public static function buildRepeatRequest($data)
+    {
         if (!isset($data['sign_password']) || !isset($data['projectid']) || !isset($data['orderid'])) {
             throw new WebToPayException('sign_password, projectid or orderid is not provided');
         }
@@ -158,10 +164,11 @@ class WebToPay {
      * @param  string $language
      * @return string $url
      */
-    public static function getPaymentUrl($language = 'LIT') {
-       return (in_array($language, array('lt', 'lit', 'LIT')))
-           ? self::PAY_URL
-           : self::PAYSERA_PAY_URL;
+    public static function getPaymentUrl($language = 'LIT')
+    {
+        return (in_array($language, array('lt', 'lit', 'LIT')))
+            ? self::PAY_URL
+            : self::PAYSERA_PAY_URL;
     }
 
     /**
@@ -185,7 +192,8 @@ class WebToPay {
      * @throws WebToPayException
      * @deprecated use validateAndParseData() and check status code yourself
      */
-    public static function checkResponse($query, $userData = array()) {
+    public static function checkResponse($query, $userData = array())
+    {
         $projectId = isset($userData['projectid']) ? $userData['projectid'] : null;
         $password = isset($userData['sign_password']) ? $userData['sign_password'] : null;
         $logFile = isset($userData['log']) ? $userData['log'] : null;
@@ -200,9 +208,8 @@ class WebToPay {
                 self::log('OK', http_build_query($data, '', '&'), $logFile);
             }
             return $data;
-
         } catch (WebToPayException $exception) {
-        	if ($logFile && $exception->getCode() != WebToPayException::E_DEPRECATED_USAGE) {
+            if ($logFile && $exception->getCode() != WebToPayException::E_DEPRECATED_USAGE) {
                 self::log('ERR', $exception . "\nQuery: " . http_build_query($query, '', '&'), $logFile);
             }
             throw $exception;
@@ -220,7 +227,8 @@ class WebToPay {
      *
      * @throws WebToPayException
      */
-    public static function validateAndParseData(array $query, $projectId, $password) {
+    public static function validateAndParseData(array $query, $projectId, $password)
+    {
         $factory = new WebToPay_Factory(array('projectId' => $projectId, 'password' => $password));
         $validator = $factory->getCallbackValidator();
         $data = $validator->validateAndParseData($query);
@@ -235,7 +243,8 @@ class WebToPay {
      * @throws WebToPayException
      * @throws WebToPay_Exception_Validation
      */
-    public static function smsAnswer($userData) {
+    public static function smsAnswer($userData)
+    {
         if (!isset($userData['id']) || !isset($userData['msg']) || !isset($userData['sign_password'])) {
             throw new WebToPay_Exception_Validation('id, msg and sign_password are required');
         }
@@ -253,14 +262,12 @@ class WebToPay {
             if ($logFile) {
                 self::log('OK', 'SMS ANSWER ' . $smsId . ' ' . $text, $logFile);
             }
-
         } catch (WebToPayException $e) {
             if ($logFile) {
                 self::log('ERR', 'SMS ANSWER ' . $e, $logFile);
             }
             throw $e;
         }
-
     }
 
 
@@ -274,7 +281,8 @@ class WebToPay {
      *
      * @throws WebToPayException
      */
-    public static function getPaymentMethodList($projectId, $currency = 'EUR') {
+    public static function getPaymentMethodList($projectId, $currency = 'EUR')
+    {
         $factory = new WebToPay_Factory(array('projectId' => $projectId));
         return $factory->getPaymentMethodListProvider()->getPaymentMethodList($currency);
     }
@@ -286,7 +294,8 @@ class WebToPay {
      * @param string $msg
      * @param string $logfile
      */
-    protected static function log($type, $msg, $logfile) {
+    protected static function log($type, $msg, $logfile)
+    {
         $fp = @fopen($logfile, 'a');
         if (!$fp) {
             return;
@@ -300,16 +309,14 @@ class WebToPay {
             $msg
         );
 
-        $logline = implode(' ', $logline)."\n";
+        $logline = implode(' ', $logline) . "\n";
         fwrite($fp, $logline);
         fclose($fp);
 
         // clear big log file
         if (filesize($logfile) > 1024 * 1024 * pi()) {
-            copy($logfile, $logfile.'.old');
+            copy($logfile, $logfile . '.old');
             unlink($logfile);
         }
     }
 }
-
-
