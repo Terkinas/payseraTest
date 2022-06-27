@@ -1,0 +1,15 @@
+{
+    "name": "terkinas/paysera",
+    "description": "payment system",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Terkinas",
+            "email": "terkinas@gmail.com"
+        }
+    ],
+    "require": {
+        "webtopay/libwebtopay": "^1.8"
+    }
+}

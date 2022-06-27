@@ -1,0 +1,12 @@
+{
+    "name": "terkinas/contact",
+    "description": "contact form",
+    "type": "library",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "terkinas\\contact\\": "src/"
+        }
+    }
+}
