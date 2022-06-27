@@ -11,7 +11,7 @@
 
 <body>
     <form action="{{ route('pay.request') }}" method="post">
-        {{ csrf_field() }}
+        @csrf
         <input hidden value="ab" name="notoption" />
         <button type="submit">Pay</button>
     </form>
