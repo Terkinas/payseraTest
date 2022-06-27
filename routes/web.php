@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/cart', [PaymentController::class, 'index']);
-Route::post('/cart', [PaymentController::class, 'request'])->name('pay.request');
+Route::post('/', [PaymentController::class, 'request'])->name('pay.request');

@@ -10,7 +10,7 @@
 
 <body>
     <form action="{{ route('pay.request') }}" method="post">
-        @csrf
+        {{ csrf_field() }}
         <button type="submit">Pay</button>
     </form>
 </body>
